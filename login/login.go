@@ -12,8 +12,8 @@ import (
 
 type (
 	WxConfig struct {
-		AppId  string `json:"appid"`
-		Secret string `json:"secret"`
+		AppId   string `json:"appid"`     // 微信APPID
+		Secret  string `json:"secret"`    // 微信Secret
 	}
 
 	WxAccessToken struct {
@@ -46,19 +46,27 @@ type (
 
 // 微信APP登录 直接登录获取用户信息
 func (m *WxConfig) AppLogin(code string) (wxUserInfo *WxUserInfo, err error) {
-	accessToken, err := m.GetWxAccessToken(code)
-
-	if err != nil {
-		return wxUserInfo, err
-	}
-
-	return accessToken.GetUserInfo()
-
+	return m.LoginCode(code)
 }
 
 // 微信小程序登录 直接登录获取用户信息
 func (m *WxConfig) WexLogin() {
 
+}
+
+// 微信网页登录，在微信网页授权，需要认证公众号
+func (m *WxConfig) WemLogin(code string) (wxUserInfo *WxUserInfo, err error) {
+	return m.LoginCode(code)
+}
+
+// 通过Code登录
+func (m *WxConfig) LoginCode(code string) (wxUserInfo *WxUserInfo, err error) {
+	accessToken, err := m.GetWxAccessToken(code)
+
+	if err != nil {
+		return wxUserInfo, err
+	}
+	return accessToken.GetUserInfo()
 }
 
 // 通过code获取AccessToken
@@ -81,10 +89,6 @@ func (m *WxConfig) GetWxAccessToken(code string) (accessToken *WxAccessToken, er
 
 	for k, v := range t {
 		params.Set(k, v)
-	}
-
-	if err != nil {
-		return accessToken, err
 	}
 
 	body, err := utils.NewRequest("GET", common.AccessTokenUrl, []byte(params.Encode()))
@@ -139,7 +143,7 @@ func (m *WxAccessToken) GetUserInfo() (wxUserInfo *WxUserInfo, err error) {
 	return
 }
 
-// TODO 重新获取AccessToken
+// 重新获取AccessToken
 func (m *WxAccessToken) GetRefreshToken(appid string) error {
 
 	if appid == "" {
@@ -180,7 +184,7 @@ func (m *WxAccessToken) GetRefreshToken(appid string) error {
 	return nil
 }
 
-// TODO 校验AccessToken
+// 校验AccessToken
 func (m *WxAccessToken) CheckAccessToken() (ok bool, err error) {
 
 	if m.AccessToken == "" {
