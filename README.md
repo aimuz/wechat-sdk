@@ -26,10 +26,11 @@ results, outTradeNo, err := wePay.AppPay(100))
 ## 支持功能
 
 - [x] APP支付
-- [x] 小程序支付
 - [x] APP登录
 - [x] H5登录
-- [ ] Web登录
+- [x] 小程序登录
+- [x] 小程序支付
+- [x] Web登录
 - [ ] 小程序支付
 - [ ] 公众号支付
 - [ ] 扫码支付
