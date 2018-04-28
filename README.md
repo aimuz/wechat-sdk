@@ -30,7 +30,7 @@ results, outTradeNo, err := wePay.AppPay(100))
 - [x] H5登录
 - [x] 小程序登录
 - [ ] 小程序支付
-- [x] Web登录
+- [ ] Web登录
 - [ ] 公众号支付
 - [ ] 扫码支付
 - [ ] 刷卡支付
