@@ -78,7 +78,7 @@ func (m *WxConfig) AppLogin(code string) (wxUserInfo *WxUserInfo, err error) {
 }
 
 // 微信小程序登录 直接登录获取用户信息
-func (m *WxConfig) WexLogin(code, encryptedData, iv string) (wechatEncryptedData *WechatEncryptedData, err error) {
+func (m *WxConfig) WexLogin(code, encryptedData, iv string) (wxUserInfo *WechatEncryptedData, err error) {
 	wXBizDataCrypt, err := m.GetJsCode2Session(code)
 	if err != nil {
 		return nil, err
