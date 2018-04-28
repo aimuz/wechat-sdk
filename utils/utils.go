@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"crypto/aes"
+	"crypto/cipher"
 )
 
 func NewRequest(method, url string, data []byte) (body []byte, err error) {
@@ -96,7 +98,6 @@ func GenWeChatPaySign(m map[string]string, payKey string) (string, error) {
 }
 
 // 生成订单号，不推荐直接使用
-
 func GetTradeNO(prefix string) string {
 	now := time.Now()
 	strTime := fmt.Sprintf("%04d%02d%02d%02d%02d%02d", now.Year(), now.Month(), now.Day(), now.Hour(),
@@ -114,4 +115,42 @@ func RandomNum(min int64, max int64) int64 {
 func RandomNumString(min int64, max int64) string {
 	num := RandomNum(min, max)
 	return strconv.FormatInt(num, 10)
+}
+
+func PKCS7Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS7UnPadding(origData []byte) []byte {
+	length := len(origData)
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+func AesEncrypt(origData, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	origData = PKCS7Padding(origData, blockSize)
+	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
+	crypted := make([]byte, len(origData))
+	blockMode.CryptBlocks(crypted, origData)
+	return crypted, nil
+}
+
+func AesDecrypt(crypted, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
+	origData := make([]byte, len(crypted))
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS7UnPadding(origData)
+	return origData, nil
 }

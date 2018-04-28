@@ -11,4 +11,5 @@ const (
 	RefreshTokenUrl     = "https://api.weixin.qq.com/sns/oauth2/refresh_token" //重新获取access_token
 	UserInfoUrl         = "https://api.weixin.qq.com/sns/userinfo"             //通过access_token获取userInfo
 	CheckAccessTokenUrl = "https://api.weixin.qq.com/sns/auth"                 //检验授权凭证（access_token）是否有效
+	JsCode2Session      = "https://api.weixin.qq.com/sns/jscode2session"       //临时登录凭证校验接口
 )
