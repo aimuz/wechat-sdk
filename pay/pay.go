@@ -2,42 +2,42 @@ package pay
 
 import (
 	"fmt"
+	"github.com/aimuz/wechat-sdk/utils"
 	"strings"
 	"time"
-	"wechat-sdk/utils"
 )
 
 type (
-	// WePay
+	// WePay 微信支付配置类
 	WePay struct {
-		AppId     string // 微信应用APPId或小程序APPId
-		MchId     string // 商户号
+		AppID     string // 微信应用APPId或小程序APPId
+		MchID     string // 商户号
 		PayKey    string // 支付密钥
-		NotifyUrl string // 回调地址
+		NotifyURL string // 回调地址
 		TradeType string // 小程序写"JSAPI",客户端写"APP"
 		Body      string // 商品描述 必填
 	}
 
-	// PayRet 返回的基本内容
-	PayRet struct {
+	// Ret 返回的基本内容
+	Ret struct {
 		Timestamp string `json:"timestamp,omitempty"` // 时间戳
 		NonceStr  string `json:"noncestr,omitempty"`  // 随机字符串
 	}
 
-	// APP 下单返回内容
+	// AppPayRet 下单返回内容
 	AppPayRet struct {
-		PayRet
+		Ret
 
-		AppId     string `json:"appid,omitempty"`     // 应用ID
-		PartnerId string `json:"partnerid,omitempty"` // 微信支付分配的商户号
-		PrepayId  string `json:"prepayid,omitempty"`  // 预支付交易会话ID
+		AppID     string `json:"appid,omitempty"`     // 应用ID
+		PartnerID string `json:"partnerid,omitempty"` // 微信支付分配的商户号
+		PrepayID  string `json:"prepayid,omitempty"`  // 预支付交易会话ID
 		Package   string `json:"package,omitempty"`   // 扩展字段 暂填写固定值Sign=WXPay
 		Sign      string `json:"sign,omitempty"`      // 签名
 	}
 
-	// 微信小程序下单返回内容
+	// WaxPayRet 微信小程序下单返回内容
 	WaxPayRet struct {
-		PayRet
+		Ret
 
 		Package  string `json:"package,omitempty"`  // 扩展字段 统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
 		SignType string `json:"signType,omitempty"` // 签名算法，暂支持 MD5
@@ -45,18 +45,18 @@ type (
 	}
 )
 
-// App支付
+// AppPay App支付
 func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err error) {
 
-	outTradeNo = utils.GetTradeNO(m.MchId)
+	outTradeNo = utils.GetTradeNO(m.MchID)
 
 	appUnifiedOrder := &AppUnifiedOrder{
 		UnifiedOrder: UnifiedOrder{
-			AppId:          m.AppId,
-			MchId:          m.MchId,
-			NotifyUrl:      m.NotifyUrl,
+			AppID:          m.AppID,
+			MchID:          m.MchID,
+			NotifyURL:      m.NotifyURL,
 			TradeType:      m.TradeType,
-			SpBillCreateIp: "123.123.123.123", // Ip
+			SpBillCreateIP: "123.123.123.123", // Ip
 			OutTradeNo:     outTradeNo,
 			TotalFee:       totalFee,
 			Body:           m.Body,
@@ -83,13 +83,13 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 		return results, outTradeNo, err
 	}
 	results = &AppPayRet{
-		PayRet: PayRet{
+		Ret: Ret{
 			Timestamp: fmt.Sprintf("%d", time.Now().Unix()),
 			NonceStr:  unifiedOrderResp.NonceStr,
 		},
-		AppId:     unifiedOrderResp.AppId,
-		PartnerId: unifiedOrderResp.MchId,
-		PrepayId:  unifiedOrderResp.PrepayId,
+		AppID:     unifiedOrderResp.AppID,
+		PartnerID: unifiedOrderResp.MchID,
+		PrepayID:  unifiedOrderResp.PrepayID,
 		Package:   "Sign=WXPay",
 	}
 
@@ -108,24 +108,24 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 	return
 }
 
-// 小程序支付
-func (m *WePay) WaxPay(totalFee int, openId string) (results *WaxPayRet, outTradeNo string, err error) {
+// WaxPay 小程序支付
+func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTradeNo string, err error) {
 
-	outTradeNo = utils.GetTradeNO(m.MchId)
+	outTradeNo = utils.GetTradeNO(m.MchID)
 
 	wxaUnifiedOrder := &WxaUnifiedOrder{
 		UnifiedOrder: UnifiedOrder{
-			AppId:          m.AppId,
-			MchId:          m.MchId,
-			NotifyUrl:      m.NotifyUrl,
+			AppID:          m.AppID,
+			MchID:          m.MchID,
+			NotifyURL:      m.NotifyURL,
 			TradeType:      m.TradeType,
-			SpBillCreateIp: "123.123.123.123", // Ip
+			SpBillCreateIP: "123.123.123.123", // Ip
 			OutTradeNo:     outTradeNo,
 			TotalFee:       totalFee,
 			Body:           m.Body,
 			NonceStr:       utils.RandomNumString(16, 32),
 		},
-		OpenId: openId,
+		OpenID: openID,
 	}
 
 	t, err := utils.Struct2Map(wxaUnifiedOrder)
@@ -147,11 +147,11 @@ func (m *WePay) WaxPay(totalFee int, openId string) (results *WaxPayRet, outTrad
 		return results, outTradeNo, err
 	}
 	results = &WaxPayRet{
-		PayRet: PayRet{
+		Ret: Ret{
 			Timestamp: fmt.Sprintf("%d", time.Now().Unix()),
 			NonceStr:  unifiedOrderResp.NonceStr,
 		},
-		Package:  "prepay_id=" + unifiedOrderResp.PrepayId,
+		Package:  "prepay_id=" + unifiedOrderResp.PrepayID,
 		SignType: "MD5",
 	}
 

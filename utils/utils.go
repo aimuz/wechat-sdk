@@ -16,6 +16,7 @@ import (
 	"time"
 )
 
+// 请求包装
 func NewRequest(method, url string, data []byte) (body []byte, err error) {
 
 	if method == "GET" {
