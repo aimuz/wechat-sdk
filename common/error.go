@@ -1,8 +1,9 @@
 package common
 
+// 错误的信息
 const (
 	ErrAccessTokenEmpty  = "access token is empty"
-	ErrAppIdEmpty        = "appid empty"
+	ErrAppIDEmpty        = "appid empty"
 	ErrRefreshTokenEmpty = "refresh token is empty"
-	ErrOpenIdEmpty       = "openid is empty"
+	ErrOpenIDEmpty       = "openid is empty"
 )
