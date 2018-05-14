@@ -8,20 +8,23 @@ import (
 )
 
 type (
+	// WePay
 	WePay struct {
-		AppId     string //微信应用APPId或小程序APPId
-		MchId     string //商户号
-		PayKey    string //支付密钥
-		NotifyUrl string //回调地址
-		TradeType string //小程序写"JSAPI",客户端写"APP"
-		Body      string //商品描述 必填
+		AppId     string // 微信应用APPId或小程序APPId
+		MchId     string // 商户号
+		PayKey    string // 支付密钥
+		NotifyUrl string // 回调地址
+		TradeType string // 小程序写"JSAPI",客户端写"APP"
+		Body      string // 商品描述 必填
 	}
-
+	
+	// PayRet 返回的基本内容
 	PayRet struct {
 		Timestamp string `json:"timestamp,omitempty"` // 时间戳
 		NonceStr  string `json:"noncestr,omitempty"`  // 随机字符串
 	}
 
+	// APP 下单返回内容
 	AppPayRet struct {
 		PayRet
 
@@ -32,6 +35,7 @@ type (
 		Sign      string `json:"sign,omitempty"`      // 签名
 	}
 
+	// 微信小程序下单返回内容
 	WaxPayRet struct {
 		PayRet
 
