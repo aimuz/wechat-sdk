@@ -2,7 +2,7 @@ package common
 
 const (
 	// 微信统一下单
-	UnifiedOrderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder" 
+	UnifiedOrderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 )
 
 // https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317853&token=&lang=zh_CN

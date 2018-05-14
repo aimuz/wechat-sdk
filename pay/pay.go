@@ -17,7 +17,7 @@ type (
 		TradeType string // 小程序写"JSAPI",客户端写"APP"
 		Body      string // 商品描述 必填
 	}
-	
+
 	// PayRet 返回的基本内容
 	PayRet struct {
 		Timestamp string `json:"timestamp,omitempty"` // 时间戳
