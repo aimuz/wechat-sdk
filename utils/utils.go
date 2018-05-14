@@ -2,6 +2,8 @@ package utils
 
 import (
 	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
@@ -12,8 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"crypto/aes"
-	"crypto/cipher"
 )
 
 func NewRequest(method, url string, data []byte) (body []byte, err error) {

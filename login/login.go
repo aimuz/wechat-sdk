@@ -1,16 +1,16 @@
 package login
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/url"
 	"time"
 	"wechat-sdk/common"
 	"wechat-sdk/utils"
-	"fmt"
-	"encoding/base64"
-	"crypto/aes"
-	"crypto/cipher"
 )
 
 type (
