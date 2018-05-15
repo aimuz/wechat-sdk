@@ -1,5 +1,6 @@
 package utils
 
+// 通用工具类
 import (
 	"bytes"
 	"crypto/aes"
@@ -16,7 +17,7 @@ import (
 	"time"
 )
 
-// 请求包装
+// NewRequest 请求包装
 func NewRequest(method, url string, data []byte) (body []byte, err error) {
 
 	if method == "GET" {
@@ -41,7 +42,7 @@ func NewRequest(method, url string, data []byte) (body []byte, err error) {
 	return body, err
 }
 
-// Struct2Map
+// Struct2Map struct to map，依赖 json tab
 func Struct2Map(r interface{}) (s map[string]string, err error) {
 	var temp map[string]interface{}
 	var result = make(map[string]string)
@@ -72,7 +73,7 @@ func Struct2Map(r interface{}) (s map[string]string, err error) {
 	return result, nil
 }
 
-// 生成签名
+// GenWeChatPaySign 生成微信签名
 func GenWeChatPaySign(m map[string]string, payKey string) (string, error) {
 	delete(m, "sign")
 	var signData []string
@@ -98,7 +99,7 @@ func GenWeChatPaySign(m map[string]string, payKey string) (string, error) {
 	return fmt.Sprintf("%x", signByte), nil
 }
 
-// 生成订单号，不推荐直接使用
+// GetTradeNO 生成订单号，不推荐直接使用
 func GetTradeNO(prefix string) string {
 	now := time.Now()
 	strTime := fmt.Sprintf("%04d%02d%02d%02d%02d%02d", now.Year(), now.Month(), now.Day(), now.Hour(),
@@ -107,29 +108,34 @@ func GetTradeNO(prefix string) string {
 	return prefix + strTime + RandomNumString(100000, 999999)
 }
 
+// RandomNum 随机数
 func RandomNum(min int64, max int64) int64 {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	num := min + r.Int63n(max-min+1)
 	return num
 }
 
+// RandomNumString 随机字符串
 func RandomNumString(min int64, max int64) string {
 	num := RandomNum(min, max)
 	return strconv.FormatInt(num, 10)
 }
 
+// PKCS7Padding Aes 加密 PKCS7填充
 func PKCS7Padding(ciphertext []byte, blockSize int) []byte {
 	padding := blockSize - len(ciphertext)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(ciphertext, padtext...)
 }
 
+// PKCS7UnPadding Aes 解密去除PKCS7填充
 func PKCS7UnPadding(origData []byte) []byte {
 	length := len(origData)
 	unpadding := int(origData[length-1])
 	return origData[:(length - unpadding)]
 }
 
+// AesEncrypt Aes 加密
 func AesEncrypt(origData, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -143,6 +149,7 @@ func AesEncrypt(origData, key []byte) ([]byte, error) {
 	return crypted, nil
 }
 
+// AesDecrypt Aes 解密
 func AesDecrypt(crypted, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
