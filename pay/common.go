@@ -70,7 +70,7 @@ func NewUnifiedOrder(unifiedOrder interface{}) (unifiedOrderResp UnifiedOrderRes
 		return unifiedOrderResp, err
 	}
 
-	body, err := utils.NewRequest("POST", common.UnifiedOrderUrl, data)
+	body, err := utils.NewRequest("POST", common.UnifiedOrderURL, data)
 
 	if err != nil {
 		return unifiedOrderResp, err

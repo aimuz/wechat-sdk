@@ -128,7 +128,7 @@ func (m *WxConfig) GetWxAccessToken(code string) (accessToken *WxAccessToken, er
 		params.Set(k, v)
 	}
 
-	body, err := utils.NewRequest("GET", common.AccessTokenUrl, []byte(params.Encode()))
+	body, err := utils.NewRequest("GET", common.AccessTokenURL, []byte(params.Encode()))
 	if err != nil {
 		return accessToken, err
 	}
@@ -159,7 +159,7 @@ func (m *WxAccessToken) GetUserInfo() (wxUserInfo *WxUserInfo, err error) {
 		"access_token": []string{m.AccessToken},
 		"openid":       []string{m.OpenID},
 	}
-	body, err := utils.NewRequest("GET", common.UserInfoUrl, []byte(params.Encode()))
+	body, err := utils.NewRequest("GET", common.UserInfoURL, []byte(params.Encode()))
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +179,7 @@ func (m *WxAccessToken) GetUserInfo() (wxUserInfo *WxUserInfo, err error) {
 func (m *WxAccessToken) GetRefreshToken(appid string) error {
 
 	if appid == "" {
-		return errors.New(common.ErrAppIdEmpty)
+		return errors.New(common.ErrAppIDEmpty)
 	}
 
 	if m.RefreshToken == "" {
@@ -187,7 +187,7 @@ func (m *WxAccessToken) GetRefreshToken(appid string) error {
 	}
 
 	if m.OpenID == "" {
-		return errors.New(common.ErrOpenIdEmpty)
+		return errors.New(common.ErrOpenIDEmpty)
 	}
 
 	params := url.Values{
@@ -195,7 +195,7 @@ func (m *WxAccessToken) GetRefreshToken(appid string) error {
 		"grant_type":    []string{"refresh_token"},
 		"refresh_token": []string{m.RefreshToken},
 	}
-	body, err := utils.NewRequest("GET", common.RefreshTokenUrl, []byte(params.Encode()))
+	body, err := utils.NewRequest("GET", common.RefreshTokenURL, []byte(params.Encode()))
 	if err != nil {
 		return err
 	}
@@ -219,14 +219,14 @@ func (m *WxAccessToken) CheckAccessToken() (ok bool, err error) {
 	}
 
 	if m.OpenID == "" {
-		return ok, errors.New(common.ErrOpenIdEmpty)
+		return ok, errors.New(common.ErrOpenIDEmpty)
 	}
 
 	params := url.Values{
 		"openid":       []string{m.OpenID},
 		"access_token": []string{m.AccessToken},
 	}
-	body, err := utils.NewRequest("GET", common.CheckAccessTokenUrl, []byte(params.Encode()))
+	body, err := utils.NewRequest("GET", common.CheckAccessTokenURL, []byte(params.Encode()))
 	if err != nil {
 		return ok, err
 	}
@@ -269,7 +269,7 @@ func (m *WxConfig) GetJsCode2Session(code string) (wXBizDataCrypt *WXBizDataCryp
 		params.Set(k, v)
 	}
 
-	body, err := utils.NewRequest("GET", common.JsCode2Session, []byte(params.Encode()))
+	body, err := utils.NewRequest("GET", common.JsCode2SessionURL, []byte(params.Encode()))
 	if err != nil {
 		return wXBizDataCrypt, err
 	}
