@@ -1,5 +1,6 @@
 # wechat-sdk
 [![Go Report Card](https://goreportcard.com/badge/github.com/aimuz/wechat-sdk)](https://goreportcard.com/report/github.com/aimuz/wechat-sdk)
+[![codecov](https://codecov.io/gh/aimuz/wechat-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/aimuz/wechat-sdk)
 
 最全最好用的微信SDK，支持APP，小程序，H5，Web登录支付，企业付款等功能
 
