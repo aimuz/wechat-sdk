@@ -38,7 +38,8 @@ type (
 	// WaxPayRet 微信小程序下单返回内容
 	WaxPayRet struct {
 		Ret
-		AppID     string `json:"appid,omitempty"`   // 应用ID
+
+		AppID    string `json:"appId,omitempty"`
 		Package  string `json:"package,omitempty"`  // 扩展字段 统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
 		SignType string `json:"signType,omitempty"` // 签名算法，暂支持 MD5
 		PaySign  string `json:"paySign,omitempty"`  // 签名
@@ -151,7 +152,7 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 			Timestamp: fmt.Sprintf("%d", time.Now().Unix()),
 			NonceStr:  unifiedOrderResp.NonceStr,
 		},
-		AppID:    m.AppID,
+		AppID: m.AppID,
 		Package:  "prepay_id=" + unifiedOrderResp.PrepayID,
 		SignType: "MD5",
 	}
