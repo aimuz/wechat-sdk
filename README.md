@@ -6,18 +6,22 @@
 
 
 ## 快速开始
-以下是APP支付简单例子
+以下是APP和小程序支付简单例子
 ```go
 wePay := &WePay{
 	AppId:     "xxx",
 	MchId:     "xxx",
 	PayKey:    "xxx",
 	NotifyUrl: "xxx",
-	TradeType: "xxx",
+	TradeType: "xxx", // APP支付填写`APP`,小程序支付填写`JSAPI`
 	Body:      "xxx",
 }
 
-results, outTradeNo, err := wePay.AppPay(100))
+# APP支付
+results, outTradeNo, err := wePay.AppPay(100) // 金额，以分为单位
+
+# 小程序支付
+results, outTradeNo, err := wePay.WaxPay(100, "open_id") // 金额，以分为单位；open_id为获取的用户的open_id
 ```
 
 ## 使用
@@ -33,7 +37,7 @@ results, outTradeNo, err := wePay.AppPay(100))
 - [x] APP登录
 - [x] H5登录
 - [x] 小程序登录
-- [ ] 小程序支付
+- [x] 小程序支付
 - [ ] Web登录
 - [ ] 公众号支付
 - [ ] 扫码支付
