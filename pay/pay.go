@@ -35,7 +35,7 @@ type (
 		Sign      string `json:"sign,omitempty"`      // 签名
 	}
 
-	// AppRet 返回的基本内容
+	// WaxRet 返回的基本内容
 	WaxRet struct {
 		Timestamp string `json:"timeStamp,omitempty"` // 时间戳
 		NonceStr  string `json:"nonceStr,omitempty"`  // 随机字符串
