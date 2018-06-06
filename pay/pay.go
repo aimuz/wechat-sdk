@@ -18,15 +18,15 @@ type (
 		Body      string // 商品描述 必填
 	}
 
-	// Ret 返回的基本内容
-	Ret struct {
-		Timestamp string `json:"timeStamp,omitempty"` // 时间戳
-		NonceStr  string `json:"nonceStr,omitempty"`  // 随机字符串
+	// AppRet 返回的基本内容
+	AppRet struct {
+		Timestamp string `json:"timestamp,omitempty"` // 时间戳
+		NonceStr  string `json:"noncestr,omitempty"`  // 随机字符串
 	}
 
 	// AppPayRet 下单返回内容
 	AppPayRet struct {
-		Ret
+		AppRet
 
 		AppID     string `json:"appid,omitempty"`     // 应用ID
 		PartnerID string `json:"partnerid,omitempty"` // 微信支付分配的商户号
@@ -35,11 +35,17 @@ type (
 		Sign      string `json:"sign,omitempty"`      // 签名
 	}
 
+	// AppRet 返回的基本内容
+	WaxRet struct {
+		Timestamp string `json:"timeStamp,omitempty"` // 时间戳
+		NonceStr  string `json:"nonceStr,omitempty"`  // 随机字符串
+	}
+
 	// WaxPayRet 微信小程序下单返回内容
 	WaxPayRet struct {
-		Ret
+		WaxRet
 
-		AppID    string `json:"appId,omitempty"`
+		AppID    string `json:"appId,omitempty"`    // 应用ID
 		Package  string `json:"package,omitempty"`  // 扩展字段 统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
 		SignType string `json:"signType,omitempty"` // 签名算法，暂支持 MD5
 		PaySign  string `json:"paySign,omitempty"`  // 签名
@@ -84,7 +90,7 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 		return results, outTradeNo, err
 	}
 	results = &AppPayRet{
-		Ret: Ret{
+		AppRet: AppRet{
 			Timestamp: fmt.Sprintf("%d", time.Now().Unix()),
 			NonceStr:  unifiedOrderResp.NonceStr,
 		},
@@ -148,7 +154,7 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 		return results, outTradeNo, err
 	}
 	results = &WaxPayRet{
-		Ret: Ret{
+		WaxRet: WaxRet{
 			Timestamp: fmt.Sprintf("%d", time.Now().Unix()),
 			NonceStr:  unifiedOrderResp.NonceStr,
 		},
