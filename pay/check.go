@@ -25,6 +25,11 @@ type (
 		TradeType     string  `xml:"trade_type"`
 		TransactionID string  `xml:"transaction_id"`
 	}
+
+	WaxPayNotifyResp struct {
+		ReturnCode  string `xml:"return_code"`
+		ReturnMsg   string `xml:"return_msg"`
+	}
 )
 
 /**
