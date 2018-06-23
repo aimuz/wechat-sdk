@@ -158,7 +158,7 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 			Timestamp: fmt.Sprintf("%d", time.Now().Unix()),
 			NonceStr:  unifiedOrderResp.NonceStr,
 		},
-		AppID: m.AppID,
+		AppID:    m.AppID,
 		Package:  "prepay_id=" + unifiedOrderResp.PrepayID,
 		SignType: "MD5",
 	}

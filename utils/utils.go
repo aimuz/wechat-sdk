@@ -6,8 +6,8 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
-	"encoding/json"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -98,7 +98,7 @@ func GenWeChatPaySign(m map[string]string, payKey string) (string, error) {
 		return "", err
 	}
 
-	sign:= strings.ToUpper(hex.EncodeToString(signByte))
+	sign := strings.ToUpper(hex.EncodeToString(signByte))
 	return sign, nil
 }
 
