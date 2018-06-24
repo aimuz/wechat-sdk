@@ -8,6 +8,8 @@
 ## 快速开始
 以下是APP和小程序支付简单例子
 ```go
+import "github.com/mailbaoer/wechat-sdk/pay"
+
 wePay := &WePay{
 	AppId:     "xxx",
 	MchId:     "xxx",
@@ -25,6 +27,25 @@ results, outTradeNo, err := wePay.WaxPay(100, "open_id") // 金额，以分为�
 ```
 
 ## 使用
+### 小程序支付通知
+```go
+waxNotify := pay.WaxPayNotifyReq{}
+ctx.ReadXML(&waxNotify)
+verifyParams := pay.WaxVerifyParams(waxNotify)
+valid := pay.WaxpayVerifySign(verifyParams, appKey, waxNotify.Sign) //appKey 为自己在微信支付后台设置的API密钥
+
+resp := new(pay.WaxPayNotifyResp)
+
+if valid {
+	业务处理逻辑···
+	resp.ReturnCode = "SUCCESS"
+	resp.ReturnMsg = "OK"
+} else {
+	错误处理逻辑···
+	resp.ReturnCode = "FAIL"
+	resp.ReturnMsg = "Verify Failed"
+}
+```
 
 
 #### APP支付
