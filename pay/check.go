@@ -1,7 +1,7 @@
 package pay
 
 import (
-	"github.com/mailbaoer/wechat-sdk/utils"
+	"github.com/aimuz/wechat-sdk/utils"
 	"strconv"
 )
 

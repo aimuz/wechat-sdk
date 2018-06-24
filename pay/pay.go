@@ -2,7 +2,7 @@ package pay
 
 import (
 	"fmt"
-	"github.com/mailbaoer/wechat-sdk/utils"
+	"github.com/aimuz/wechat-sdk/utils"
 	"strings"
 	"time"
 )
