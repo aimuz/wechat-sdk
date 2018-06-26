@@ -8,7 +8,7 @@
 ## 快速开始
 以下是APP和小程序支付简单例子
 ```go
-import "github.com/mailbaoer/wechat-sdk/pay"
+import "github.com/aimuz/wechat-sdk/pay"
 
 wePay := &WePay{
 	AppId:     "xxx",
