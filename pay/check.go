@@ -7,6 +7,7 @@ import (
 )
 
 type (
+	// WaxPayNotifyReq WaxPayNotifyReq
 	WaxPayNotifyReq struct {
 		AppID       string  `xml:"appid"`
 		MchID       string  `xml:"mch_id"`
@@ -27,6 +28,7 @@ type (
 		TransactionID string  `xml:"transaction_id"`
 	}
 
+	// WaxPayNotifyResp WaxPayNotifyResp
 	WaxPayNotifyResp struct {
 		ReturnCode string `xml:"return_code"`
 		ReturnMsg  string `xml:"return_msg"`
