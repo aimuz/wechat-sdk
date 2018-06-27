@@ -7,10 +7,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/aimuz/wechat-sdk/common"
-	"github.com/aimuz/wechat-sdk/utils"
 	"net/url"
 	"time"
+
+	"github.com/aimuz/wechat-sdk/common"
+	"github.com/aimuz/wechat-sdk/utils"
 )
 
 type (

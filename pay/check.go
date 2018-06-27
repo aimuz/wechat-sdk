@@ -1,8 +1,9 @@
 package pay
 
 import (
-	"github.com/aimuz/wechat-sdk/utils"
 	"strconv"
+
+	"github.com/aimuz/wechat-sdk/utils"
 )
 
 type (
@@ -36,7 +37,7 @@ type (
  * 微信通知验证
  */
 
-// 微信小程序待验证参数
+// WaxVerifyParams 微信小程序待验证参数
 func WaxVerifyParams(req WaxPayNotifyReq) map[string]string {
 	verifyParams := make(map[string]string)
 
@@ -59,7 +60,7 @@ func WaxVerifyParams(req WaxPayNotifyReq) map[string]string {
 	return verifyParams
 }
 
-// 微信小程序支付签名验证
+// WaxpayVerifySign 微信小程序支付签名验证
 func WaxpayVerifySign(verifyParams map[string]string, signKey string, sign string) bool {
 	signCalc, _ := utils.GenWeChatPaySign(verifyParams, signKey)
 	if sign == signCalc {
