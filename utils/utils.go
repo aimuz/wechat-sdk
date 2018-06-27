@@ -6,6 +6,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -96,7 +97,9 @@ func GenWeChatPaySign(m map[string]string, payKey string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%x", signByte), nil
+
+	sign := strings.ToUpper(hex.EncodeToString(signByte))
+	return sign, nil
 }
 
 // GetTradeNO 生成订单号，不推荐直接使用
