@@ -33,6 +33,9 @@ func NewRequest(method, url string, data []byte) (body []byte, err error) {
 	}
 
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
 
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {

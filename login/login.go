@@ -138,7 +138,6 @@ func (m *WxConfig) GetWxAccessToken(code string) (accessToken *WxAccessToken, er
 	if err != nil {
 		return accessToken, err
 	}
-
 	if accessToken.ErrMsg != "" {
 		return accessToken, errors.New(accessToken.ErrMsg)
 	}
@@ -168,7 +167,6 @@ func (m *WxAccessToken) GetUserInfo() (wxUserInfo *WxUserInfo, err error) {
 	if err != nil {
 		return nil, err
 	}
-
 	if wxUserInfo.OpenID == "" {
 		return wxUserInfo, errors.New(wxUserInfo.ErrMsg)
 	}
@@ -200,7 +198,6 @@ func (m *WxAccessToken) GetRefreshToken(appid string) error {
 	if err != nil {
 		return err
 	}
-
 	err = json.Unmarshal(body, &m)
 	if err != nil {
 		return err
@@ -236,7 +233,6 @@ func (m *WxAccessToken) CheckAccessToken() (ok bool, err error) {
 		ErrCode int    `json:"errcode"`
 		ErrMsg  string `json:"errmsg"`
 	}{}
-
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		return ok, err
@@ -269,7 +265,6 @@ func (m *WxConfig) GetJsCode2Session(code string) (wXBizDataCrypt *WXBizDataCryp
 	for k, v := range t {
 		params.Set(k, v)
 	}
-
 	body, err := utils.NewRequest("GET", common.JsCode2SessionURL, []byte(params.Encode()))
 	if err != nil {
 		return wXBizDataCrypt, err

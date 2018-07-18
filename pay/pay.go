@@ -57,7 +57,6 @@ type (
 func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err error) {
 
 	outTradeNo = utils.GetTradeNO(m.MchID)
-
 	appUnifiedOrder := &AppUnifiedOrder{
 		UnifiedOrder: UnifiedOrder{
 			AppID:          m.AppID,
@@ -71,9 +70,7 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 			NonceStr:       utils.RandomNumString(16, 32),
 		},
 	}
-
 	t, err := utils.Struct2Map(appUnifiedOrder)
-
 	if err != nil {
 		return results, outTradeNo, err
 	}
@@ -86,7 +83,6 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 	appUnifiedOrder.Sign = strings.ToUpper(sign)
 
 	unifiedOrderResp, err := NewUnifiedOrder(appUnifiedOrder)
-
 	if err != nil {
 		return results, outTradeNo, err
 	}
@@ -120,7 +116,6 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTradeNo string, err error) {
 
 	outTradeNo = utils.GetTradeNO(m.MchID)
-
 	wxaUnifiedOrder := &WxaUnifiedOrder{
 		UnifiedOrder: UnifiedOrder{
 			AppID:          m.AppID,
@@ -135,9 +130,7 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 		},
 		OpenID: openID,
 	}
-
 	t, err := utils.Struct2Map(wxaUnifiedOrder)
-
 	if err != nil {
 		return results, outTradeNo, err
 	}
@@ -165,7 +158,6 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 	}
 
 	r, err := utils.Struct2Map(results)
-
 	if err != nil {
 		return results, outTradeNo, err
 	}

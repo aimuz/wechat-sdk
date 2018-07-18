@@ -66,13 +66,11 @@ type (
 func NewUnifiedOrder(unifiedOrder interface{}) (unifiedOrderResp UnifiedOrderResp, err error) {
 
 	data, err := xml.Marshal(unifiedOrder)
-
 	if err != nil {
 		return unifiedOrderResp, err
 	}
 
 	body, err := utils.NewRequest("POST", common.UnifiedOrderURL, data)
-
 	if err != nil {
 		return unifiedOrderResp, err
 	}
