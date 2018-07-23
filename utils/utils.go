@@ -6,9 +6,13 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/aimuz/wechat-sdk/common"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -16,10 +20,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"crypto/tls"
-	"crypto/x509"
-	"errors"
-	"github.com/aimuz/wechat-sdk/common"
 )
 
 // NewRequest 请求包装
@@ -100,6 +100,8 @@ func NewCertRequest(certFile, keyFile, rootCaFile string) (*Request, error) {
 
 	return &Request{Client: client}, nil
 }
+
+// NewRequest 发送请求
 func (m *Request) NewRequest(method, url string, data []byte) (body []byte, err error) {
 	if method == "GET" {
 		url = fmt.Sprint(url, "?", string(data))

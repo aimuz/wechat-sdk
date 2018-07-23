@@ -2,10 +2,9 @@ package pay
 
 import (
 	"encoding/xml"
-	"github.com/aimuz/wechat-sdk/utils"
-	"github.com/aimuz/wechat-sdk/common"
-	"errors"
 	"fmt"
+	"github.com/aimuz/wechat-sdk/common"
+	"github.com/aimuz/wechat-sdk/utils"
 )
 
 /*
@@ -13,10 +12,12 @@ redpack 红包
 */
 
 type (
+	// RedPack 发送红包接口
 	RedPack interface {
 		Send(payKey, certFile, keyFile, rootCaFile string) (*RedPackResp, error)
 	}
 
+	// SendRedPackReq 发送普通红包请求参数
 	SendRedPackReq struct {
 		XMLName      xml.Name `xml:"xml"`
 		NonceStr     string   `xml:"nonce_str,omitempty" json:"nonce_str"`           // NonceStr 随机字符串
@@ -37,6 +38,7 @@ type (
 		ConsumeMchID string   `xml:"consume_mch_id,omitempty" json:"consume_mch_id"` // ConsumeMchID 资金授权商户号
 	}
 
+	// RedPackResp 发送红包返回值
 	RedPackResp struct {
 		ReturnMsg   string `xml:"return_msg"`
 		MchID       string `xml:"mch_id"`
@@ -98,7 +100,7 @@ func (m *WePay) sendRedPack(req *SendRedPackReq) (string, *RedPackResp, error) {
 	return req.MchBillNo, resp, nil
 }
 
-// SendRedPack 发送普通红包
+// Send 发送普通红包
 func (m *SendRedPackReq) Send(payKey string, certFile, keyFile, rootCaFile string) (*RedPackResp, error) {
 
 	tMap, err := utils.Struct2Map(m)
@@ -141,7 +143,7 @@ func (m *SendRedPackReq) Send(payKey string, certFile, keyFile, rootCaFile strin
 // CheckErr 检查微信是否返回错误信息
 func (m *RedPackResp) CheckErr() error {
 	if m.ResultCode != "SUCCESS" || m.ReturnCode != "SUCCESS" {
-		return errors.New(fmt.Sprintf("[%s,%s]%s", m.ResultCode, m.ErrCode, m.ErrCodeDes))
+		return fmt.Errorf("[%s,%s]%s", m.ResultCode, m.ErrCode, m.ErrCodeDes)
 	}
 
 	return nil
