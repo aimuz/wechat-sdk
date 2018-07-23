@@ -37,16 +37,31 @@ valid := pay.WaxpayVerifySign(verifyParams, appKey, waxNotify.Sign) //appKey 为
 resp := new(pay.WaxPayNotifyResp)
 
 if valid {
-	业务处理逻辑···
+	// 业务处理逻辑···
 	resp.ReturnCode = "SUCCESS"
 	resp.ReturnMsg = "OK"
 } else {
-	错误处理逻辑···
+	// 错误处理逻辑···
 	resp.ReturnCode = "FAIL"
 	resp.ReturnMsg = "Verify Failed"
 }
 ```
 
+### 发送普通红包
+```go
+wx := &WePay{
+	AppID:      "xx",
+	PayKey:     "xx",
+	MchID:      "xx",
+	TradeType:  "xx",
+	CertFile:   "xx", // 证书路径
+	keyFile:    "xx", // 证书秘钥路径
+	RootCaFile: "xx", // 根证书路径
+}
+
+billNO, redPackResp, err := wx.SendRedPack(totalAmount, openID, sendName, wishing, actName, remark)
+
+```
 
 #### APP支付
 
@@ -64,4 +79,6 @@ if valid {
 - [ ] 扫码支付
 - [ ] 刷卡支付
 - [ ] 企业付款
-- [ ] 现金红包
+- [x] 现金红包
+   - [x] 发送红包
+   - [ ] 裂变红包
