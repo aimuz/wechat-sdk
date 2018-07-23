@@ -11,12 +11,15 @@ import (
 type (
 	// WePay 微信支付配置类
 	WePay struct {
-		AppID     string // 微信应用APPId或小程序APPId
-		MchID     string // 商户号
-		PayKey    string // 支付密钥
-		NotifyURL string // 回调地址
-		TradeType string // 小程序写"JSAPI",客户端写"APP"
-		Body      string // 商品描述 必填
+		AppID      string // 微信应用APPId或小程序APPId
+		MchID      string // 商户号
+		PayKey     string // 支付密钥
+		NotifyURL  string // 回调地址
+		TradeType  string // 小程序写"JSAPI",客户端写"APP"
+		Body       string // 商品描述 必填
+		CertFile   string // 微信支付平台证书
+		keyFile    string // 微信支付平台证书秘钥
+		RootCaFile string // 微信支付平台根证书
 	}
 
 	// AppRet 返回的基本内容
@@ -67,7 +70,7 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 			OutTradeNo:     outTradeNo,
 			TotalFee:       totalFee,
 			Body:           m.Body,
-			NonceStr:       utils.RandomNumString(16, 32),
+			NonceStr:       utils.RandomString(32),
 		},
 	}
 	t, err := utils.Struct2Map(appUnifiedOrder)
@@ -98,7 +101,6 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 	}
 
 	r, err := utils.Struct2Map(results)
-
 	if err != nil {
 		return results, outTradeNo, err
 	}
@@ -126,7 +128,7 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 			OutTradeNo:     outTradeNo,
 			TotalFee:       totalFee,
 			Body:           m.Body,
-			NonceStr:       utils.RandomNumString(16, 32),
+			NonceStr:       utils.RandomString(32),
 		},
 		OpenID: openID,
 	}
@@ -143,7 +145,6 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 	wxaUnifiedOrder.Sign = strings.ToUpper(sign)
 
 	unifiedOrderResp, err := NewUnifiedOrder(wxaUnifiedOrder)
-
 	if err != nil {
 		return results, outTradeNo, err
 	}

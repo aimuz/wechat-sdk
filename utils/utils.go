@@ -16,6 +16,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"crypto/tls"
+	"crypto/x509"
+	"errors"
+	"github.com/aimuz/wechat-sdk/common"
 )
 
 // NewRequest 请求包装
@@ -38,10 +42,84 @@ func NewRequest(method, url string, data []byte) (body []byte, err error) {
 	}
 
 	body, err = ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return body, err
 	}
+
+	return body, err
+}
+
+type Request struct {
+	Client *http.Client
+}
+
+// NewCertRequest 双向安全证书请求
+func NewCertRequest(certFile, keyFile, rootCaFile string) (*Request, error) {
+
+	if certFile == "" || keyFile == "" || rootCaFile == "" {
+		return nil, errors.New(common.ErrCertCertEmpty)
+	}
+
+	cert, err := ioutil.ReadFile(certFile)
+	if err != nil {
+		return nil, err
+	}
+
+	key, err := ioutil.ReadFile(keyFile)
+	if err != nil {
+		return nil, err
+	}
+
+	rootCa, err := ioutil.ReadFile(rootCaFile)
+	if err != nil {
+		return nil, err
+	}
+
+	tlsCert, err := tls.X509KeyPair(cert, key)
+	if err != nil {
+		return nil, err
+	}
+
+	certPool := x509.NewCertPool()
+	ok := certPool.AppendCertsFromPEM(rootCa)
+	if !ok {
+		return nil, errors.New("failed to parse root certificate")
+	}
+
+	conf := &tls.Config{
+		Certificates: []tls.Certificate{tlsCert},
+		RootCAs:      certPool,
+	}
+	trans := &http.Transport{
+		TLSClientConfig: conf,
+	}
+	client := &http.Client{
+		Transport: trans,
+	}
+
+	return &Request{Client: client}, nil
+}
+func (m *Request) NewRequest(method, url string, data []byte) (body []byte, err error) {
+	if method == "GET" {
+		url = fmt.Sprint(url, "?", string(data))
+		data = nil
+	}
+
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(data))
+	if err != nil {
+		return body, err
+	}
+	resp, err := m.Client.Do(req)
+	if err != nil {
+		return body, err
+	}
+
+	body, err = ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
+	if err != nil {
+		return body, err
+	}
 
 	return body, err
 }
@@ -65,7 +143,6 @@ func Struct2Map(r interface{}) (s map[string]string, err error) {
 			result[k] = v2
 			break
 		case int8, uint8, int, uint, int32, uint32, int64, uint64:
-			fmt.Println("k2=", v2)
 			result[k] = fmt.Sprint(v2)
 			break
 		case float32, float64:
@@ -114,6 +191,21 @@ func GetTradeNO(prefix string) string {
 	return prefix + strTime + RandomNumString(100000, 999999)
 }
 
+// GetBillNo 生成订单号，指定位数
+func GetBillNo(prefix string, length int) string {
+	now := time.Now()
+	strTime := fmt.Sprintf("%04d%02d%02d%02d%02d%02d", now.Year(), now.Month(), now.Day(), now.Hour(),
+		now.Minute(),
+		now.Second())
+
+	str := fmt.Sprint(prefix, strTime)
+	if a := length - len(str); a > 0 {
+		str = str + RandomLenNum(a)
+	}
+	fmt.Println(str)
+	return str[:length]
+}
+
 // RandomNum 随机数
 func RandomNum(min int64, max int64) int64 {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -121,10 +213,45 @@ func RandomNum(min int64, max int64) int64 {
 	return num
 }
 
-// RandomNumString 随机字符串
+// RandomNumString 随机数字字符串
 func RandomNumString(min int64, max int64) string {
 	num := RandomNum(min, max)
 	return strconv.FormatInt(num, 10)
+}
+
+// RandomLenNum 指定随机数字字符串
+func RandomLenNum(length int) string {
+	str := ""
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < length; i++ {
+		str += strconv.Itoa(r.Intn(10))
+	}
+	return str
+}
+
+const (
+	letterIdxBits = 6                    // 6 bits to represent a letter index
+	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+)
+
+// RandomString 随机字符串
+func RandomString(length int) string {
+	b := make([]byte, length)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i, cache, remain := length-1, r.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = r.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+	return string(b)
 }
 
 // PKCS7Padding Aes 加密 PKCS7填充
