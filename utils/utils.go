@@ -50,6 +50,7 @@ func NewRequest(method, url string, data []byte) (body []byte, err error) {
 	return body, err
 }
 
+// Request 请求包装体
 type Request struct {
 	Client *http.Client
 }
