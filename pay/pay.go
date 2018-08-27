@@ -2,7 +2,6 @@ package pay
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/aimuz/wechat-sdk/utils"
@@ -79,11 +78,10 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 	}
 
 	// 获取签名
-	sign, err := utils.GenWeChatPaySign(t, m.PayKey)
+	appUnifiedOrder.Sign, err = utils.GenWeChatPaySign(t, m.PayKey)
 	if err != nil {
 		return results, outTradeNo, err
 	}
-	appUnifiedOrder.Sign = strings.ToUpper(sign)
 
 	unifiedOrderResp, err := NewUnifiedOrder(appUnifiedOrder)
 	if err != nil {
@@ -105,11 +103,10 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 		return results, outTradeNo, err
 	}
 
-	sign, err = utils.GenWeChatPaySign(r, m.PayKey)
+	results.Sign, err = utils.GenWeChatPaySign(r, m.PayKey)
 	if err != nil {
 		return results, outTradeNo, err
 	}
-	results.Sign = strings.ToUpper(sign)
 
 	return
 }
@@ -138,11 +135,10 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 	}
 
 	// 获取签名
-	sign, err := utils.GenWeChatPaySign(t, m.PayKey)
+	wxaUnifiedOrder.Sign, err = utils.GenWeChatPaySign(t, m.PayKey)
 	if err != nil {
 		return results, outTradeNo, err
 	}
-	wxaUnifiedOrder.Sign = strings.ToUpper(sign)
 
 	unifiedOrderResp, err := NewUnifiedOrder(wxaUnifiedOrder)
 	if err != nil {
@@ -163,11 +159,10 @@ func (m *WePay) WaxPay(totalFee int, openID string) (results *WaxPayRet, outTrad
 		return results, outTradeNo, err
 	}
 
-	sign, err = utils.GenWeChatPaySign(r, m.PayKey)
+	results.PaySign, err = utils.GenWeChatPaySign(r, m.PayKey)
 	if err != nil {
 		return results, outTradeNo, err
 	}
-	results.PaySign = strings.ToUpper(sign)
 
 	return
 }
