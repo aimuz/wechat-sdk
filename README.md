@@ -67,6 +67,12 @@ billNO, redPackResp, err := wx.SendRedPack(totalAmount, openID, sendName, wishin
 
 ##### APP简单使用
 
+## 讨论
+
+[issues](https://github.com/aimuz/wechat-sdk/issues)
+
+[论坛](https://kezhan.io/t/aimuz.wechat-sdk)
+
 ## 支持功能
 
 - [x] APP支付
