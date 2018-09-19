@@ -3,6 +3,7 @@ package pay
 import (
 	"encoding/xml"
 	"fmt"
+
 	"github.com/aimuz/wechat-sdk/common"
 	"github.com/aimuz/wechat-sdk/utils"
 )
@@ -108,13 +109,10 @@ func (m *SendRedPackReq) Send(payKey string, certFile, keyFile, rootCaFile strin
 		return nil, err
 	}
 
-	fmt.Println(tMap)
-
 	m.Sign, err = utils.GenWeChatPaySign(tMap, payKey)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(m.Sign)
 
 	data, err := xml.Marshal(m)
 	if err != nil {

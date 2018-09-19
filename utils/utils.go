@@ -12,7 +12,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/aimuz/wechat-sdk/common"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -20,6 +19,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/aimuz/wechat-sdk/common"
 )
 
 // NewRequest 请求包装
@@ -142,7 +143,6 @@ func Struct2Map(r interface{}) (s map[string]string, err error) {
 	for k, v := range temp {
 		switch v2 := v.(type) {
 		case string:
-			//fmt.Printf("%s=%s\n", k, v2)
 			result[k] = v2
 			break
 		case int8, uint8, int, uint, int32, uint32, int64, uint64:
@@ -153,7 +153,6 @@ func Struct2Map(r interface{}) (s map[string]string, err error) {
 			break
 		}
 	}
-	//fmt.Println(result)
 	return result, nil
 }
 

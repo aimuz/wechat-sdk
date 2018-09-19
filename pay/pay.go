@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/aimuz/wechat-sdk/utils"
+	"github.com/jinzhu/copier"
 )
 
 type (
@@ -108,6 +109,13 @@ func (m *WePay) AppPay(totalFee int) (results *AppPayRet, outTradeNo string, err
 		return results, outTradeNo, err
 	}
 
+	return
+}
+
+// AppPayStruct 自定义参数实现，需要自定义
+func (m *WePay) AppPayStruct(order AppUnifiedOrder) (results *AppPayRet, outTradeNo string, err error) {
+	unifiedOrder := new(AppUnifiedOrder)
+	copier.Copy(order, &unifiedOrder)
 	return
 }
 
