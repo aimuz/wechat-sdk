@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"encoding/xml"
+
 	"github.com/aimuz/wechat-sdk/utils"
 )
 
