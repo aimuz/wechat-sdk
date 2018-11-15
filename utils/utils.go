@@ -149,6 +149,7 @@ func Struct2Map(r interface{}) (s map[string]string, err error) {
 	return result, nil
 }
 
+// ToStringE interface to string
 func ToStringE(i interface{}) (string, error) {
 	switch s := i.(type) {
 	case string:
