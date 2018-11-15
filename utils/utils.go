@@ -141,19 +141,55 @@ func Struct2Map(r interface{}) (s map[string]string, err error) {
 		return nil, err
 	}
 	for k, v := range temp {
-		switch v2 := v.(type) {
-		case string:
-			result[k] = v2
-			break
-		case int8, uint8, int, uint, int32, uint32, int64, uint64:
-			result[k] = fmt.Sprint(v2)
-			break
-		case float32, float64:
-			result[k] = fmt.Sprint(v2)
-			break
+		result[k], err = ToStringE(v)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return result, nil
+}
+
+func ToStringE(i interface{}) (string, error) {
+	switch s := i.(type) {
+	case string:
+		return s, nil
+	case bool:
+		return strconv.FormatBool(s), nil
+	case float64:
+		return strconv.FormatFloat(s, 'f', -1, 64), nil
+	case float32:
+		return strconv.FormatFloat(float64(s), 'f', -1, 32), nil
+	case int:
+		return strconv.Itoa(s), nil
+	case int64:
+		return strconv.FormatInt(s, 10), nil
+	case int32:
+		return strconv.Itoa(int(s)), nil
+	case int16:
+		return strconv.FormatInt(int64(s), 10), nil
+	case int8:
+		return strconv.FormatInt(int64(s), 10), nil
+	case uint:
+		return strconv.FormatInt(int64(s), 10), nil
+	case uint64:
+		return strconv.FormatInt(int64(s), 10), nil
+	case uint32:
+		return strconv.FormatInt(int64(s), 10), nil
+	case uint16:
+		return strconv.FormatInt(int64(s), 10), nil
+	case uint8:
+		return strconv.FormatInt(int64(s), 10), nil
+	case []byte:
+		return string(s), nil
+	case nil:
+		return "", nil
+	case fmt.Stringer:
+		return s.String(), nil
+	case error:
+		return s.Error(), nil
+	default:
+		return "", fmt.Errorf("unable to cast %#v of type %T to string", i, i)
+	}
 }
 
 // GenWeChatPaySign 生成微信签名
